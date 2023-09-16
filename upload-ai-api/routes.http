@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:3333
+
+# @name get-prompts
+GET {{baseUrl}}/prompts
+
+###
+
+# @name upload
+POST {{baseUrl}}/videos
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="example.mp3"
+Content-Type: audio/mpeg
+
+< ./example.mp3
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+# @name create-transcription
+POST {{baseUrl}}/videos/19fa7af4-1764-464c-bc23-a3388832fd15/transcription
+Content-Type: application/json
+
+{
+  "prompt": "felicidade, motivação, filosofia"
+}
+
+###
+
+# @name generate-ai-completion
+POST {{baseUrl}}/ai/generate
+Content-Type: application/json
+
+{
+  "videoId": "19fa7af4-1764-464c-bc23-a3388832fd15",
+  "temperature": 0.5,
+  "template": "Gere um resumo sucinto da transcrição do vídeo informado a seguir: '''{transcription}'''"
+}
